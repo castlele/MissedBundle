@@ -1,19 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " # ",
-    "XXX"
+    "SRS",
+    "R R",
+    "RRR"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:diamond"
+    "R": {
+      "item": "minecraft:rabbit_hide"
     },
-    "X": {
-      "item": "minecraft:iron_ingot"
+    "S": {
+      "item": "minecraft:string"
     }
   },
   "result": {
-    "item": "examplemod:example_item",
-    "count": 1
+    "item": "missedbundle:bundle"
   }
 }
