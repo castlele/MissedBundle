@@ -11,6 +11,7 @@ public class MissedBundle {
     public static final String MODID = "missedbundle";
 
     public MissedBundle() {
+        System.out.printf("hello Bliat");
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         ItemsFactory itemsFactory = new ItemsFactory();
 
