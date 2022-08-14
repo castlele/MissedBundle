@@ -12,5 +12,6 @@ public final class BundleProperties extends Item.Properties {
 
     private final void setup() {
         tab(CreativeModeTab.TAB_TOOLS);
+        stacksTo(1);
     }
 }
