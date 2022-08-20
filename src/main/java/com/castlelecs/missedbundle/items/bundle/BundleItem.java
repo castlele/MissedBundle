@@ -1,5 +1,6 @@
-package com.castlelecs.missedbundle.items;
+package com.castlelecs.missedbundle.items.bundle;
 
+import com.castlelecs.missedbundle.utilities.Singleton;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -8,11 +9,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public final class BundleItem extends Item {
+public final class BundleItem extends Item implements Singleton {
+
+    public static final BundleItem shared = new BundleItem();
 
     // MARK: - Init
 
-    public BundleItem() {
+    private BundleItem() {
         super(new BundleProperties());
     }
 

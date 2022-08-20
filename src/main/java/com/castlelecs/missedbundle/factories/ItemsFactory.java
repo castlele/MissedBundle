@@ -1,35 +1,26 @@
 package com.castlelecs.missedbundle.factories;
 
 import com.castlelecs.missedbundle.MissedBundle;
-import com.castlelecs.missedbundle.items.BundleItem;
+import com.castlelecs.missedbundle.utilities.RegistrationFactory;
+import com.castlelecs.missedbundle.utilities.Singleton;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
-public class ItemsFactory {
+public class ItemsFactory extends RegistrationFactory<Item> implements Singleton {
 
     private final DeferredRegister<Item> items = DeferredRegister.create(ForgeRegistries.ITEMS, MissedBundle.MODID);
 
-    public final void registerItems(IEventBus bus, ItemsType[] itemsTypes) {
-        for (ItemsType itemType : itemsTypes) {
+    public final static ItemsFactory shared = new ItemsFactory();
 
-            switch (itemType) {
-                case BUNDLE:
-                    items.register(itemType.rawValue, this::createBundleItem);
-                default:
-                    break;
-            }
-        }
+    // MARK: - Init
 
-        items.register(bus);
+    private ItemsFactory() { }
 
-        return;
-    }
+    // MARK: - Public methods
 
-    private final Item createBundleItem() {
-        return new BundleItem();
+    public void registerItems(IEventBus bus) {
+        super.register(bus, items, ItemsType.values());
     }
 }
