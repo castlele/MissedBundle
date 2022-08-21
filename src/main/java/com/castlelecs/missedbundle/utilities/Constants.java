@@ -14,5 +14,5 @@ public class Constants {
 
     // MARK - Registry names
 
-    public static String BUNDLE_REGISTRY_NAME = "bundle"
+    public static String BUNDLE_REGISTRY_NAME = "bundle";
 }
