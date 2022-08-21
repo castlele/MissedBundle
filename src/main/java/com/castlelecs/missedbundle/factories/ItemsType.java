@@ -1,11 +1,12 @@
 package com.castlelecs.missedbundle.factories;
 
 import com.castlelecs.missedbundle.items.bundle.BundleItem;
+import com.castlelecs.missedbundle.utilities.Constants;
 import com.castlelecs.missedbundle.utilities.RegistryType;
 import net.minecraft.world.item.Item;
 
 public enum ItemsType implements RegistryType<Item> {
-    BUNDLE("bundle");
+    BUNDLE(Constants.BUNDLE_REGISTRY_NAME);
 
     public final String rawValue;
 

@@ -36,7 +36,8 @@ public class CommonSubscriber {
         @SubscribeEvent
         public static void showTooltip(RenderTooltipEvent.GatherComponents event) {
             if (event.getItemStack().is(BundleItem.shared))
-                event.getTooltipElements().add(Either.right(new BundleTooltipComponent("1", "10")));
+                // 1 - index after item's title
+                event.getTooltipElements().add(1, Either.right(new BundleTooltipComponent("1", "10")));
         }
     }
 }
