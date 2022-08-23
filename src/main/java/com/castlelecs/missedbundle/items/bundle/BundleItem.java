@@ -27,7 +27,9 @@ public final class BundleItem extends Item implements Singleton {
         ItemStack otherStack = slot.getItem();
 
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
-            InventoryHelper.saveItems(otherStack, bundleStack);
+            InventoryHelper.saveItems(otherStack, bundleStack, () -> {
+                removeItemFromSlot(slot, otherStack);
+            });
             return true;
         }
         return false;
@@ -42,10 +44,20 @@ public final class BundleItem extends Item implements Singleton {
                                             SlotAccess slotAccess) {
 
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
-            InventoryHelper.saveItems(otherStack, bundleStack);
+            InventoryHelper.saveItems(otherStack, bundleStack, () -> {
+                removeCarriedItem(player);
+            });
             return true;
         }
 
         return false;
+    }
+
+    private void removeCarriedItem(Player player) {
+        player.inventoryMenu.setCarried(new ItemStack(Items.AIR));
+    }
+
+    private void removeItemFromSlot(Slot slot, ItemStack item) {
+        slot.remove(item.getCount());
     }
 }

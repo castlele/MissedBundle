@@ -7,6 +7,8 @@ public class Constants {
     public static int SLOT_SIZE = 16;
     public static int DEFAULT_FONT_SIZE = 9;
     public static int SMALL_PADDING = 4;
+    public static int BUNDLE_SIZE = 64;
+    public static int NON_STACKED_MAX_STACK_SIZE = 1;
 
     // MARK: - Paths
 
