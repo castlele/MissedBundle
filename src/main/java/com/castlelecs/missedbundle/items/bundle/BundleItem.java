@@ -1,5 +1,6 @@
 package com.castlelecs.missedbundle.items.bundle;
 
+import com.castlelecs.missedbundle.utilities.InventoryHelper;
 import com.castlelecs.missedbundle.utilities.Singleton;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
@@ -35,6 +36,7 @@ public final class BundleItem extends Item implements Singleton {
                                             SlotAccess slotAccess) {
 
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
+            InventoryHelper.saveItems(bundleStack, otherStack);
             return true;
         }
 

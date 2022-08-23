@@ -12,7 +12,6 @@ import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-
 /**
  * A subscriber for common events.
  * <p>
