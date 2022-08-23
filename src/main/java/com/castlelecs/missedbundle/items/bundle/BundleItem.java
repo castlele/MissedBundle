@@ -23,8 +23,14 @@ public final class BundleItem extends Item implements Singleton {
     // MARK: - Overrided methods
 
     @Override
-    public boolean overrideStackedOnOther(ItemStack otherStack, Slot slot, ClickAction actionType, Player player) {
-        return super.overrideStackedOnOther(otherStack, slot, actionType, player);
+    public boolean overrideStackedOnOther(ItemStack bundleStack, Slot slot, ClickAction actionType, Player player) {
+        ItemStack otherStack = slot.getItem();
+
+        if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
+            InventoryHelper.saveItems(bundleStack, otherStack);
+            return true;
+        }
+        return false;
     }
 
     @Override
