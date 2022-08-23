@@ -1,4 +1,4 @@
-package com.castlelecs.missedbundle.items;
+package com.castlelecs.missedbundle.items.bundle;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -10,7 +10,7 @@ public final class BundleProperties extends Item.Properties {
         setup();
     }
 
-    private final void setup() {
+    private void setup() {
         tab(CreativeModeTab.TAB_TOOLS);
         stacksTo(1);
     }
