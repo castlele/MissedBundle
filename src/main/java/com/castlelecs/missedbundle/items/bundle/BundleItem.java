@@ -27,7 +27,7 @@ public final class BundleItem extends Item implements Singleton {
         ItemStack otherStack = slot.getItem();
 
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
-            InventoryHelper.saveItems(bundleStack, otherStack);
+            InventoryHelper.saveItems(otherStack, bundleStack);
             return true;
         }
         return false;
@@ -42,7 +42,7 @@ public final class BundleItem extends Item implements Singleton {
                                             SlotAccess slotAccess) {
 
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
-            InventoryHelper.saveItems(bundleStack, otherStack);
+            InventoryHelper.saveItems(otherStack, bundleStack);
             return true;
         }
 

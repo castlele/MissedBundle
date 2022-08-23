@@ -9,13 +9,13 @@ import java.util.Set;
 
 public class InventoryHelper {
 
-    public static void saveItems(ItemStack bundle, ItemStack newItems) {
+    public static void saveItems(ItemStack newItem, ItemStack bundle) {
         CompoundTag compoundTag = bundle.getOrCreateTag();
         var list = new ListTag();
 
-        list.add(newItems.serializeNBT());
+        list.add(newItem.serializeNBT());
 
-        compoundTag.put(newItems.getDescriptionId(), list);
+        compoundTag.put(newItem.getDescriptionId(), list);
         bundle.setTag(compoundTag);
     }
 
