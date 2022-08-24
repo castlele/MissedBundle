@@ -1,5 +1,6 @@
 package com.castlelecs.missedbundle.items.bundle;
 
+import com.castlelecs.missedbundle.utilities.InventoryHelper;
 import com.castlelecs.missedbundle.utilities.Singleton;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
@@ -22,8 +23,14 @@ public final class BundleItem extends Item implements Singleton {
     // MARK: - Overrided methods
 
     @Override
-    public boolean overrideStackedOnOther(ItemStack otherStack, Slot slot, ClickAction actionType, Player player) {
-        return super.overrideStackedOnOther(otherStack, slot, actionType, player);
+    public boolean overrideStackedOnOther(ItemStack bundleStack, Slot slot, ClickAction actionType, Player player) {
+        ItemStack otherStack = slot.getItem();
+
+        if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
+            InventoryHelper.saveItems(otherStack, bundleStack);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -35,6 +42,7 @@ public final class BundleItem extends Item implements Singleton {
                                             SlotAccess slotAccess) {
 
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
+            InventoryHelper.saveItems(otherStack, bundleStack);
             return true;
         }
 

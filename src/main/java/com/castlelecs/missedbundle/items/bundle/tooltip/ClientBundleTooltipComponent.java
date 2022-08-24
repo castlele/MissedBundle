@@ -15,7 +15,6 @@ import net.minecraft.util.FormattedCharSequence;
 
 import static net.minecraft.client.gui.GuiComponent.blit;
 
-
 /**
  * A client component which draws components in the tooltip
  */
