@@ -16,6 +16,8 @@ public class InventoryHelper {
         if (!isEnoughSpace(bundle, newItem))
             return;
 
+        bundle.setDamageValue(50);
+
         CompoundTag compoundTag = bundle.getOrCreateTag();
         var list = new ListTag();
 
@@ -42,6 +44,12 @@ public class InventoryHelper {
         }
 
         return inventory;
+    }
+
+    public static int getItemsCount(ItemStack bundle) {
+        ItemStack[] items = getItems(bundle);
+
+        return getItemsCount(items);
     }
 
     // MARK: - Private methods
