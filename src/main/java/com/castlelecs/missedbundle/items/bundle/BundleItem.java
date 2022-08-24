@@ -14,7 +14,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import java.awt.*;
 import java.util.List;
 
 public final class BundleItem extends Item implements Singleton {
@@ -23,9 +22,7 @@ public final class BundleItem extends Item implements Singleton {
 
     // MARK: - Init
 
-    private BundleItem() {
-        super(new BundleProperties());
-    }
+    private BundleItem() { super(new BundleProperties()); }
 
     // MARK: - Overrided methods
 
@@ -75,13 +72,9 @@ public final class BundleItem extends Item implements Singleton {
         super.appendHoverText(bundleStack, level, componentList, tooltipFlag);
     }
 
-    private void removeCarriedItem(Player player) {
-        player.inventoryMenu.setCarried(new ItemStack(Items.AIR));
-    }
+    private void removeCarriedItem(Player player) { player.inventoryMenu.setCarried(new ItemStack(Items.AIR)); }
 
-    private void removeItemFromSlot(Slot slot, ItemStack item) {
-        slot.remove(item.getCount());
-    }
+    private void removeItemFromSlot(Slot slot, ItemStack item) { slot.remove(item.getCount()); }
 
     private void updateFullnessIndicator(ItemStack bundle) {
         int currentCount = InventoryHelper.getItemsCount(bundle);
