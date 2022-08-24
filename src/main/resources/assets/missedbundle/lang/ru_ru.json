@@ -1,3 +1,4 @@
 {
-  "item.missedbundle.bundle": "Мешок"
+  "item.missedbundle.bundle": "Мешок",
+  "item.missedbundle.bundle_fullness": "Наполнение: %s / %s"
 }

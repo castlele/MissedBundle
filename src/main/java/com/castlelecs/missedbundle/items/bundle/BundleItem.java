@@ -3,6 +3,7 @@ package com.castlelecs.missedbundle.items.bundle;
 import com.castlelecs.missedbundle.utilities.Constants;
 import com.castlelecs.missedbundle.utilities.InventoryHelper;
 import com.castlelecs.missedbundle.utilities.Singleton;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -10,6 +11,11 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+
+import java.awt.*;
+import java.util.List;
 
 public final class BundleItem extends Item implements Singleton {
 
@@ -60,6 +66,15 @@ public final class BundleItem extends Item implements Singleton {
         return false;
     }
 
+    @Override
+    public void appendHoverText(ItemStack bundleStack, Level level, List<Component> componentList, TooltipFlag tooltipFlag) {
+        int currentValue = InventoryHelper.getItemsCount(bundleStack);
+
+        componentList.add(Component.translatable("item.missedbundle.bundle_fullness", currentValue, Constants.BUNDLE_SIZE));
+
+        super.appendHoverText(bundleStack, level, componentList, tooltipFlag);
+    }
+
     private void removeCarriedItem(Player player) {
         player.inventoryMenu.setCarried(new ItemStack(Items.AIR));
     }
@@ -70,8 +85,12 @@ public final class BundleItem extends Item implements Singleton {
 
     private void updateFullnessIndicator(ItemStack bundle) {
         int currentCount = InventoryHelper.getItemsCount(bundle);
-        float fullness = (float) currentCount / Constants.BUNDLE_SIZE * 100;
+        float fillingValue = (float) currentCount / Constants.BUNDLE_SIZE * 100;
 
-        bundle.setDamageValue(100 - (int) fullness);
+        // Max durability value isn't used because if fillingValue == 0, bundle item doesn't have fullness indicator
+        int maxValue = Constants.MAX_BUNDLE_FULLNESS + 1;
+        int formattedFillingValue = maxValue - (int) fillingValue;
+
+        bundle.setDamageValue(formattedFillingValue);
     }
 }

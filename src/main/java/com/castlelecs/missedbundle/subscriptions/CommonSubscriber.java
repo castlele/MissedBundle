@@ -1,10 +1,10 @@
 package com.castlelecs.missedbundle.subscriptions;
 
 import com.castlelecs.missedbundle.MissedBundle;
-import com.castlelecs.missedbundle.factories.ItemsFactory;
 import com.castlelecs.missedbundle.items.bundle.BundleItem;
 import com.castlelecs.missedbundle.items.bundle.tooltip.BundleTooltipComponent;
 import com.castlelecs.missedbundle.items.bundle.tooltip.ClientBundleTooltipComponent;
+import com.castlelecs.missedbundle.utilities.Constants;
 import com.mojang.datafixers.util.Either;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
@@ -34,9 +34,12 @@ public class CommonSubscriber {
     public static class TooltipSubscriber {
         @SubscribeEvent
         public static void showTooltip(RenderTooltipEvent.GatherComponents event) {
-            if (event.getItemStack().is(BundleItem.shared))
-                // 1 - index after item's title
-                event.getTooltipElements().add(1, Either.right(new BundleTooltipComponent("1", "10")));
+            if (event.getItemStack().is(BundleItem.shared)) {
+                var toolTipElements = event.getTooltipElements();
+
+                toolTipElements.remove(Constants.DURABILITY_INDEX);
+                toolTipElements.add(Constants.BUNDLE_INVENTORY_INDEX, Either.right(new BundleTooltipComponent()));
+            }
         }
     }
 }
