@@ -1,9 +1,11 @@
-package com.castlelecs.missedbundle.utilities;
+package com.castlelecs.missedbundle.items.bundle.inventory;
 
+import com.castlelecs.missedbundle.utilities.Constants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -29,10 +31,24 @@ public class InventoryHelper {
         System.out.printf(Arrays.toString(getItems(bundle)) + "\n");
     }
 
+    public static ItemStack removeLast(ItemStack bundle) {
+        CompoundTag compoundTag = bundle.getOrCreateTag();
+        String[] keys = getKeys(compoundTag);
+
+        if (keys.length == 0)
+            return new ItemStack(Items.AIR);;
+
+        ListTag list = compoundTag.getList(keys[keys.length - 1], Tag.TAG_COMPOUND);
+        CompoundTag compound = list.getCompound(0);
+
+        compoundTag.remove(keys[keys.length - 1]);
+
+        return ItemStack.of(compound);
+    }
+
     public static ItemStack[] getItems(ItemStack bundle) {
         CompoundTag compoundTag = bundle.getOrCreateTag();
-        Set<String> setOfKeys = compoundTag.getAllKeys();
-        String[] keys = setOfKeys.toArray(new String[0]);
+        String[] keys = getKeys(compoundTag);
         ItemStack[] inventory = new ItemStack[keys.length];
 
         for (var index = 0; index < keys.length; index++) {
@@ -92,5 +108,11 @@ public class InventoryHelper {
     private static void putItemsToCompoundTag(CompoundTag tag, ItemStack newItems, ListTag list) {
         list.add(newItems.serializeNBT());
         tag.put(newItems.getDescriptionId(), list);
+    }
+
+    private static String[] getKeys(CompoundTag tag) {
+        Set<String> setOfKeys = tag.getAllKeys();
+
+        return setOfKeys.toArray(new String[0]);
     }
 }
