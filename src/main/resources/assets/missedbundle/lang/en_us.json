@@ -1,3 +1,4 @@
 {
-  "item.missedbundle.bundle": "Bundle"
+  "item.missedbundle.bundle": "Bundle",
+  "item.missedbundle.bundle_fullness": "Fullness: %s / %s"
 }

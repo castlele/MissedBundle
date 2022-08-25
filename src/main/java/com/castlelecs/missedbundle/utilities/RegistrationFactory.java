@@ -10,7 +10,5 @@ public abstract class RegistrationFactory<Type> {
             register.register(type.getRawValue(), type::getItem);
 
         register.register(bus);
-
-        return;
     }
 }
