@@ -39,11 +39,14 @@ public class InventoryHelper {
             return new ItemStack(Items.AIR);;
 
         ListTag list = compoundTag.getList(keys[keys.length - 1], Tag.TAG_COMPOUND);
-        CompoundTag compound = list.getCompound(0);
+        CompoundTag itemsCompound = list.getCompound(0);
 
         compoundTag.remove(keys[keys.length - 1]);
+        var removedItem = ItemStack.of(itemsCompound);
 
-        return ItemStack.of(compound);
+        return removedItem.getItem() == Items.AIR
+                ? removeLast(bundle)
+                : removedItem;
     }
 
     public static ItemStack[] removeAll(ItemStack bundle) {
