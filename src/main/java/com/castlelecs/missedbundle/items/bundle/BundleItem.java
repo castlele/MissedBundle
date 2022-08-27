@@ -28,16 +28,12 @@ public final class BundleItem extends Item implements Singleton {
 
     // MARK: - Overrided methods
 
-
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack activeItem = player.getInventory().getSelected();
 
         if (hand == InteractionHand.MAIN_HAND && activeItem.getItem() == BundleItem.shared) {
-            for (var index = 0; index < InventoryHelper.getItemsCount(activeItem); index++) {
-                player.drop(InventoryHelper.removeLast(activeItem), false);
-            }
-
+            dropAllItems(activeItem, player);
             updateFullnessIndicator(activeItem);
         }
 
@@ -61,8 +57,7 @@ public final class BundleItem extends Item implements Singleton {
 
         // Put an item from the bundle to the slot
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() == Items.AIR) {
-            ItemStack removedFromBundleItem = InventoryHelper.removeLast(bundleStack);
-            slot.set(removedFromBundleItem);
+            addItemToSlot(bundleStack, slot);
 
             updateFullnessIndicator(bundleStack);
 
@@ -93,11 +88,7 @@ public final class BundleItem extends Item implements Singleton {
 
         // Get an item out from the bundle
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() == Items.AIR) {
-            ItemStack removedFromBundleItem = InventoryHelper.removeLast(bundleStack);
-
-            if (removedFromBundleItem.getItem() != Items.AIR)
-                player.inventoryMenu.setCarried(removedFromBundleItem);
-
+            addCarriedItem(bundleStack, player);
             updateFullnessIndicator(bundleStack);
 
             return true;
@@ -109,10 +100,19 @@ public final class BundleItem extends Item implements Singleton {
     @Override
     public void appendHoverText(ItemStack bundleStack, Level level, List<Component> componentList, TooltipFlag tooltipFlag) {
         int currentValue = InventoryHelper.getItemsCount(bundleStack);
-
-        componentList.add(Component.translatable(Constants.BUNDLE_FULLNESS_TEXT_INDICATOR, currentValue, Constants.BUNDLE_SIZE));
+        var component = Component.translatable(Constants.BUNDLE_FULLNESS_TEXT_INDICATOR, currentValue, Constants.BUNDLE_SIZE);
+        componentList.add(component);
 
         super.appendHoverText(bundleStack, level, componentList, tooltipFlag);
+    }
+
+    // MARK: - Private methods
+
+    private void dropAllItems(ItemStack bundle, Player player) {
+        ItemStack[] removedItems = InventoryHelper.removeAll(bundle);
+
+        for (ItemStack removedItem : removedItems)
+            player.drop(removedItem, true);
     }
 
     private void removeCarriedItem(Player player) {
@@ -121,6 +121,18 @@ public final class BundleItem extends Item implements Singleton {
 
     private void removeItemFromSlot(Slot slot, ItemStack item) {
         slot.remove(item.getCount());
+    }
+
+    private void addCarriedItem(ItemStack bundleStack, Player player) {
+        ItemStack removedFromBundleItem = InventoryHelper.removeLast(bundleStack);
+
+        if (removedFromBundleItem.getItem() != Items.AIR)
+            player.inventoryMenu.setCarried(removedFromBundleItem);
+    }
+
+    private void addItemToSlot(ItemStack bundleStack, Slot slot) {
+        ItemStack removedFromBundleItem = InventoryHelper.removeLast(bundleStack);
+        slot.set(removedFromBundleItem);
     }
 
     private void updateFullnessIndicator(ItemStack bundle) {

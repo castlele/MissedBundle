@@ -46,6 +46,17 @@ public class InventoryHelper {
         return ItemStack.of(compound);
     }
 
+    public static ItemStack[] removeAll(ItemStack bundle) {
+        int size = getItemsCount(bundle);
+        ItemStack[] removedItems = new ItemStack[size];
+
+        for (var index = 0; index < size; index++) {
+            removedItems[index] = removeLast(bundle);
+        }
+
+        return removedItems;
+    }
+
     public static ItemStack[] getItems(ItemStack bundle) {
         CompoundTag compoundTag = bundle.getOrCreateTag();
         String[] keys = getKeys(compoundTag);
