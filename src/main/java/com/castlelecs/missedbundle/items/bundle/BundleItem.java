@@ -46,10 +46,7 @@ public final class BundleItem extends Item implements Singleton {
 
         // Put an item into the bundle
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
-            InventoryHelper.saveItems(otherStack, bundleStack, () -> {
-                removeItemFromSlot(slot, otherStack);
-            });
-
+            InventoryHelper.saveItems(otherStack, bundleStack);
             updateFullnessIndicator(bundleStack);
 
             return true;
@@ -58,7 +55,6 @@ public final class BundleItem extends Item implements Singleton {
         // Put an item from the bundle to the slot
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() == Items.AIR) {
             addItemToSlot(bundleStack, slot);
-
             updateFullnessIndicator(bundleStack);
 
             return true;
@@ -77,10 +73,7 @@ public final class BundleItem extends Item implements Singleton {
 
         // Put an item into the bundle
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
-            InventoryHelper.saveItems(otherStack, bundleStack, () -> {
-                removeCarriedItem(player);
-            });
-
+            InventoryHelper.saveItems(otherStack, bundleStack);
             updateFullnessIndicator(bundleStack);
 
             return true;
@@ -113,14 +106,6 @@ public final class BundleItem extends Item implements Singleton {
 
         for (ItemStack removedItem : removedItems)
             player.drop(removedItem, true);
-    }
-
-    private void removeCarriedItem(Player player) {
-        player.inventoryMenu.setCarried(new ItemStack(Items.AIR));
-    }
-
-    private void removeItemFromSlot(Slot slot, ItemStack item) {
-        slot.remove(item.getCount());
     }
 
     private void addCarriedItem(ItemStack bundleStack, Player player) {

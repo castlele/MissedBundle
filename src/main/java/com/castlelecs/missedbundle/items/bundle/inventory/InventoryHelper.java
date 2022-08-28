@@ -14,21 +14,20 @@ public class InventoryHelper {
 
     // MARK: - Public methods
 
-    public static void saveItems(ItemStack newItem, ItemStack bundle, Runnable deleteItemCompletion) {
-        if (!isEnoughSpace(bundle, newItem))
+    public static void saveItems(ItemStack newItem, ItemStack bundle) {
+        int canAddCount = determineHowMuchCanBeAdded(bundle, newItem);
+
+        if (canAddCount == 0)
             return;
 
-        bundle.setDamageValue(50);
-
-        CompoundTag compoundTag = bundle.getOrCreateTag();
         var list = new ListTag();
+        CompoundTag compoundTag = bundle.getOrCreateTag();
+        ItemStack itemsToAdd = newItem.copy();
 
-        saveItemsToCompoundTag(compoundTag, newItem, list);
+        itemsToAdd.setCount(canAddCount);
+        saveItemsToCompoundTag(compoundTag, itemsToAdd, list);
         bundle.setTag(compoundTag);
-
-        deleteItemCompletion.run();
-
-        System.out.printf(Arrays.toString(getItems(bundle)) + "\n");
+        newItem.setCount(newItem.getCount() - canAddCount);
     }
 
     public static ItemStack removeLast(ItemStack bundle) {
@@ -84,14 +83,21 @@ public class InventoryHelper {
 
     // MARK: - Private methods
 
-    private static boolean isEnoughSpace(ItemStack bundle, ItemStack newItem) {
+    private static int determineHowMuchCanBeAdded(ItemStack bundle, ItemStack newItem) {
         if (newItem.getMaxStackSize() == Constants.NON_STACKED_MAX_STACK_SIZE)
-            return false;
+            return 0;
 
         ItemStack[] items = getItems(bundle);
-        int count = getItemsCount(items) + newItem.getCount();
+        int itemsCount = getItemsCount(items);
+        int jointCount = itemsCount + newItem.getCount();
 
-        return count <= Constants.BUNDLE_SIZE;
+        if (itemsCount == Constants.BUNDLE_SIZE) {
+            return 0;
+        } else if (jointCount < Constants.BUNDLE_SIZE) {
+            return newItem.getCount();
+        } else {
+            return Constants.BUNDLE_SIZE - itemsCount;
+        }
     }
 
     private static int getItemsCount(ItemStack[] items) {
