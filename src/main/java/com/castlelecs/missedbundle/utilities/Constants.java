@@ -23,4 +23,8 @@ public class Constants {
     // MARK - Registry names
 
     public static String BUNDLE_REGISTRY_NAME = "bundle";
+
+    // MARK: - String names
+
+    public static String BUNDLE_FULLNESS_TEXT_INDICATOR = "item.missedbundle.bundle_fullness";
 }

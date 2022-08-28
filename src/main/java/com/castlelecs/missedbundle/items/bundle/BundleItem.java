@@ -1,9 +1,11 @@
 package com.castlelecs.missedbundle.items.bundle;
 
 import com.castlelecs.missedbundle.utilities.Constants;
-import com.castlelecs.missedbundle.utilities.InventoryHelper;
+import com.castlelecs.missedbundle.items.bundle.inventory.InventoryHelper;
 import com.castlelecs.missedbundle.utilities.Singleton;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -27,9 +29,22 @@ public final class BundleItem extends Item implements Singleton {
     // MARK: - Overrided methods
 
     @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack activeItem = player.getInventory().getSelected();
+
+        if (hand == InteractionHand.MAIN_HAND && activeItem.getItem() == BundleItem.shared) {
+            dropAllItems(activeItem, player);
+            updateFullnessIndicator(activeItem);
+        }
+
+        return super.use(level, player, hand);
+    }
+
+    @Override
     public boolean overrideStackedOnOther(ItemStack bundleStack, Slot slot, ClickAction actionType, Player player) {
         ItemStack otherStack = slot.getItem();
 
+        // Put an item into the bundle
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
             InventoryHelper.saveItems(otherStack, bundleStack, () -> {
                 removeItemFromSlot(slot, otherStack);
@@ -39,6 +54,16 @@ public final class BundleItem extends Item implements Singleton {
 
             return true;
         }
+
+        // Put an item from the bundle to the slot
+        if (actionType == ClickAction.SECONDARY && otherStack.getItem() == Items.AIR) {
+            addItemToSlot(bundleStack, slot);
+
+            updateFullnessIndicator(bundleStack);
+
+            return true;
+        }
+
         return false;
     }
 
@@ -50,11 +75,20 @@ public final class BundleItem extends Item implements Singleton {
                                             Player player,
                                             SlotAccess slotAccess) {
 
+        // Put an item into the bundle
         if (actionType == ClickAction.SECONDARY && otherStack.getItem() != Items.AIR) {
             InventoryHelper.saveItems(otherStack, bundleStack, () -> {
                 removeCarriedItem(player);
             });
 
+            updateFullnessIndicator(bundleStack);
+
+            return true;
+        }
+
+        // Get an item out from the bundle
+        if (actionType == ClickAction.SECONDARY && otherStack.getItem() == Items.AIR) {
+            addCarriedItem(bundleStack, player);
             updateFullnessIndicator(bundleStack);
 
             return true;
@@ -66,15 +100,40 @@ public final class BundleItem extends Item implements Singleton {
     @Override
     public void appendHoverText(ItemStack bundleStack, Level level, List<Component> componentList, TooltipFlag tooltipFlag) {
         int currentValue = InventoryHelper.getItemsCount(bundleStack);
-
-        componentList.add(Component.translatable("item.missedbundle.bundle_fullness", currentValue, Constants.BUNDLE_SIZE));
+        var component = Component.translatable(Constants.BUNDLE_FULLNESS_TEXT_INDICATOR, currentValue, Constants.BUNDLE_SIZE);
+        componentList.add(component);
 
         super.appendHoverText(bundleStack, level, componentList, tooltipFlag);
     }
 
-    private void removeCarriedItem(Player player) { player.inventoryMenu.setCarried(new ItemStack(Items.AIR)); }
+    // MARK: - Private methods
 
-    private void removeItemFromSlot(Slot slot, ItemStack item) { slot.remove(item.getCount()); }
+    private void dropAllItems(ItemStack bundle, Player player) {
+        ItemStack[] removedItems = InventoryHelper.removeAll(bundle);
+
+        for (ItemStack removedItem : removedItems)
+            player.drop(removedItem, true);
+    }
+
+    private void removeCarriedItem(Player player) {
+        player.inventoryMenu.setCarried(new ItemStack(Items.AIR));
+    }
+
+    private void removeItemFromSlot(Slot slot, ItemStack item) {
+        slot.remove(item.getCount());
+    }
+
+    private void addCarriedItem(ItemStack bundleStack, Player player) {
+        ItemStack removedFromBundleItem = InventoryHelper.removeLast(bundleStack);
+
+        if (removedFromBundleItem.getItem() != Items.AIR)
+            player.inventoryMenu.setCarried(removedFromBundleItem);
+    }
+
+    private void addItemToSlot(ItemStack bundleStack, Slot slot) {
+        ItemStack removedFromBundleItem = InventoryHelper.removeLast(bundleStack);
+        slot.set(removedFromBundleItem);
+    }
 
     private void updateFullnessIndicator(ItemStack bundle) {
         int currentCount = InventoryHelper.getItemsCount(bundle);
