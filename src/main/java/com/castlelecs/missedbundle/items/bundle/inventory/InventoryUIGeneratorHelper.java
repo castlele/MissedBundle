@@ -82,10 +82,10 @@ public class InventoryUIGeneratorHelper {
         RenderSystem.setShaderTexture(0, SlotType.STANDARD.getResource());
 
         blit(poseStack,
-                x, y,
-                textureStartXLocation, textureStartYLocation,
-                textureWidth, textureHeight,
-                Constants.SLOT_SIZE, Constants.SLOT_SIZE);
+             x, y,
+             textureStartXLocation, textureStartYLocation,
+             textureWidth, textureHeight,
+             Constants.SLOT_SIZE, Constants.SLOT_SIZE);
     }
 
     private void renderEmptyInventory(PoseStack poseStack, int x, int y) {
@@ -97,9 +97,9 @@ public class InventoryUIGeneratorHelper {
         RenderSystem.setShaderTexture(0, SlotType.EMPTY.getResource());
 
         blit(poseStack,
-                x, y,
-                textureStartXLocation, textureStartYLocation,
-                textureEndXLocation, textureEndYLocation,
-                Constants.SLOT_SIZE, Constants.SLOT_SIZE);
+             x, y,
+             textureStartXLocation, textureStartYLocation,
+             textureEndXLocation, textureEndYLocation,
+             Constants.SLOT_SIZE, Constants.SLOT_SIZE);
     }
 }
