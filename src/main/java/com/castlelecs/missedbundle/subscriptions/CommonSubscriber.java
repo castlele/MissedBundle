@@ -6,6 +6,7 @@ import com.castlelecs.missedbundle.items.bundle.tooltip.BundleTooltipComponent;
 import com.castlelecs.missedbundle.items.bundle.tooltip.ClientBundleTooltipComponent;
 import com.castlelecs.missedbundle.utilities.Constants;
 import com.mojang.datafixers.util.Either;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
@@ -34,11 +35,13 @@ public class CommonSubscriber {
     public static class TooltipSubscriber {
         @SubscribeEvent
         public static void showTooltip(RenderTooltipEvent.GatherComponents event) {
-            if (event.getItemStack().is(BundleItem.shared)) {
+            ItemStack item = event.getItemStack();
+
+            if (item.is(BundleItem.shared)) {
                 var toolTipElements = event.getTooltipElements();
 
                 toolTipElements.remove(Constants.DURABILITY_INDEX);
-                toolTipElements.add(Constants.BUNDLE_INVENTORY_INDEX, Either.right(new BundleTooltipComponent()));
+                toolTipElements.add(Constants.BUNDLE_INVENTORY_INDEX, Either.right(new BundleTooltipComponent(item)));
             }
         }
     }
