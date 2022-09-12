@@ -7,6 +7,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class InventoryHelper {
@@ -34,7 +36,7 @@ public class InventoryHelper {
         String[] keys = getKeys(compoundTag);
 
         if (keys.length == 0)
-            return new ItemStack(Items.AIR);;
+            return new ItemStack(Items.AIR);
 
         ListTag list = compoundTag.getList(keys[keys.length - 1], Tag.TAG_COMPOUND);
         CompoundTag itemsCompound = list.getCompound(0);
@@ -61,17 +63,22 @@ public class InventoryHelper {
     public static ItemStack[] getItems(ItemStack bundle) {
         CompoundTag compoundTag = bundle.getOrCreateTag();
         String[] keys = getKeys(compoundTag);
-        ItemStack[] inventory = new ItemStack[keys.length];
+        List<ItemStack> inventory = new ArrayList<>(keys.length);
 
-        for (var index = 0; index < keys.length; index++) {
-            ListTag list = compoundTag.getList(keys[index], Tag.TAG_COMPOUND);
+        for (String key : keys) {
+            ListTag list = compoundTag.getList(key, Tag.TAG_COMPOUND);
             CompoundTag compound = list.getCompound(0);
 
             ItemStack itemStack = ItemStack.of(compound);
-            inventory[index] = itemStack;
+
+            if (itemStack.getItem() == Items.AIR) {
+                continue;
+            }
+
+            inventory.add(itemStack);
         }
 
-        return inventory;
+        return inventory.toArray(new ItemStack[0]);
     }
 
     public static int getItemsCount(ItemStack bundle) {

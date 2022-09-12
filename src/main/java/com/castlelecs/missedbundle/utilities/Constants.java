@@ -9,8 +9,8 @@ public class Constants {
 
     // MARK: - Sizes
 
-    public static int SLOT_SIZE = 16;
-    public static int DEFAULT_FONT_SIZE = 9;
+    public static int SLOT_SIZE = 18;
+    public static int SLOT_OFFSET = 1;
     public static int SMALL_PADDING = 4;
     public static int BUNDLE_SIZE = 64;
     public static int NON_STACKED_MAX_STACK_SIZE = 1;
@@ -19,6 +19,7 @@ public class Constants {
     // MARK: - Paths
 
     public static String EMPTY_PLUS_SLOT = "textures/gui/empty_plus_slot.png";
+    public static String EMPTY_SLOT = "textures/gui/empty_slot.png";
 
     // MARK - Registry names
 
